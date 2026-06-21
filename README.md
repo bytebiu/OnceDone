@@ -1,68 +1,124 @@
 # OnceDone
 
-OnceDone 是一款 macOS 本地效率工具，用一个轻量入口连接常用桌面操作，减少在多个工具和窗口之间来回切换。
+OnceDone 是面向 macOS 的本地效率工具。它把主面板、截图、录屏、翻译、剪贴板历史、JSON 本地处理、菜单栏状态和鼠标滚动增强放进一套统一体验里，让高频内容处理少切窗口、少打断、可恢复。
+
+OnceDone 以本地优先为原则：截图、录屏、剪贴板和 JSON 内容默认不上传；第三方在线翻译引擎会在设置和结果中标注网络请求与隐私影响，并允许关闭网络总开关或单个引擎。
 
 ## 下载
 
 前往 [Releases](https://github.com/bytebiu/OnceDone/releases) 下载最新版本。
 
-当前预览版提供：
+当前版本：
 
-- `OnceDone-v0.1.2.dmg`：可拖拽安装的 macOS 安装包
-- `OnceDone-v0.1.2.sha256`：安装包 SHA-256 校验文件
-
-## 主要能力
-
-- 统一入口：通过主面板快速搜索和启动常用操作。
-- 截图与录屏：面向日常桌面采集、保存和复制流程。
-- 翻译：提供本地优先的翻译入口。
-- 剪贴板：管理常用复制内容，减少重复查找。
-- 权限提示：在需要屏幕录制、辅助功能等 macOS 权限时给出明确提示。
-
-## 安装
-
-1. 在 [Releases](https://github.com/bytebiu/OnceDone/releases) 下载 `.dmg`。
-2. 打开 `.dmg`，将 `OnceDone.app` 拖入 `Applications`。
-3. 从 `Applications` 打开 OnceDone，不要直接在 `.dmg` 或下载目录中运行。
-
-## 未签名版本打开方式
-
-当前预览版未使用 Apple Developer ID 签名，也未经过 Apple 公证。macOS 首次打开时可能提示无法验证开发者或拦截打开。
-
-如果遇到拦截，请先确认安装包来自本仓库 Release，然后在“系统设置 > 隐私与安全性”中点击允许打开。也可以在终端执行下面的命令移除隔离标记后再打开：
-
-```bash
-xattr -dr com.apple.quarantine /Applications/OnceDone.app
-```
-
-这个命令表示手动信任当前安装到 `/Applications` 的预览版 App。只建议在确认下载来源可信时使用。
-
-## 权限问题处理
-
-OnceDone 的截图、录屏、自动粘贴、按键监听、音频和摄像头能力会按需请求 macOS 权限。授权后请完全退出并重新打开 OnceDone，让系统权限状态重新生效。
-
-如果系统设置中已经显示 OnceDone，但 App 仍提示未授权，可以先退出 OnceDone，然后在普通终端中执行下面的命令重置授权记录。不要使用 `sudo` 执行这些命令，否则可能重置到错误的用户权限库。
-
-```bash
-tccutil reset ScreenCapture me.oncedone.app
-tccutil reset Accessibility me.oncedone.app
-tccutil reset ListenEvent me.oncedone.app
-tccutil reset Microphone me.oncedone.app
-tccutil reset Camera me.oncedone.app
-```
-
-执行后重新打开 OnceDone，并按 App 内提示重新授权。常见对应关系如下：
-
-- 屏幕录制或截图无法使用：重置 `ScreenCapture`，再到“系统设置 > 隐私与安全性 > 屏幕录制”重新允许 OnceDone。
-- 自动粘贴或辅助操作无效：重置 `Accessibility`，再到“辅助功能”重新允许 OnceDone。
-- 快捷键或按键监听无效：重置 `ListenEvent`，再到“输入监听”重新允许 OnceDone。
-- 麦克风或摄像头授权短暂生效后失效：重置 `Microphone` 或 `Camera`，重新授权后退出并重开 OnceDone。
-- 权限列表里出现多个 OnceDone：删除旧记录或执行上面的重置命令，然后只保留 `/Applications/OnceDone.app` 这一份安装位置。
+- `OnceDone-v1.0.0.dmg`：可拖拽安装的 macOS 安装包。
+- `OnceDone-v1.0.0.sha256`：安装包 SHA-256 校验文件。
 
 ## 系统要求
 
-- macOS 15 或更高版本
+- macOS 15.0 或更高版本。
+- 部分能力需要 macOS 权限：屏幕录制、辅助功能、输入监听、麦克风、摄像头。
 
-## 隐私
+## 主要能力
 
-OnceDone 以本地使用为主。截图、录屏、剪贴板内容和翻译文本默认不上传到云端。涉及第三方网络翻译时，应以应用内设置和提示为准。
+| 工具 | 用来做什么 | 关键特点 |
+| --- | --- | --- |
+| 主面板 | 快速启动工具和绑定动作 | 默认 `Option` 唤起，支持搜索、按键映射和直达工具 |
+| 截图 | 选区、窗口、全屏和延迟截图 | 标注、编号、马赛克、取色、OCR、内联翻译、钉住、预览、保存 |
+| 录屏 | 区域、窗口或全屏录制 | MP4、倒计时、音频/摄像头、控制条不入镜、完成预览、异常恢复 |
+| 翻译 | 文本翻译和多引擎结果 | Apple Translation 本地优先，Google Web 和 Youdao Web 可作为在线引擎 |
+| 剪贴板 | 本地剪贴板历史管理 | 搜索、类型筛选、收藏、钉住、自动粘贴降级、隐私排除 |
+| JSON | 本地 JSON 工作区 | 多标签、格式化、压缩、校验、修复、Diff、树形、解码、格式导出 |
+| 状态栏 | 菜单栏轻量指标 | 内存使用率、磁盘、CPU、网速、截图、录屏、翻译、剪贴板等紧凑显示 |
+| 鼠标反转 | 鼠标非连续滚轮增强 | 平滑滚动、方向翻转，默认关闭 |
+| 设置和存储 | 配置、权限和本地数据治理 | 工具启停、快捷键、存储占用、安全清理和容量快照 |
+
+## 安装
+
+1. 在 [Releases](https://github.com/bytebiu/OnceDone/releases) 下载 `OnceDone-v1.0.0.dmg`。
+2. 打开 DMG，把 `OnceDone.app` 拖入 `Applications`。
+3. 从“应用程序”打开 OnceDone，不要直接在 DMG 或下载目录中运行。
+4. 安装完成后，在 Finder 侧边栏推出临时挂载的 `OnceDone` 安装盘。
+
+Finder 侧边栏里的 `OnceDone` 盘符是 DMG 临时挂载卷，推出后会消失；每次打开 DMG 都会临时出现一次，不是额外安装了一份 App。DMG 必须挂载后才能展示拖拽安装窗口，OnceDone 不会静默自动推出这个临时卷，避免复制未完成或用户仍在查看安装说明时被打断。
+
+## macOS 打开拦截
+
+当前版本未使用 Apple Developer ID 签名，也未经过 Apple 公证。macOS 首次打开时可能提示无法验证开发者、无法打开或已损坏。
+
+如果遇到拦截，请先确认安装包来自本仓库 Release，然后在“系统设置 > 隐私与安全性”中点击允许打开。也可以手动执行：
+
+```bash
+xattr -dr com.apple.quarantine /Applications/OnceDone.app
+open /Applications/OnceDone.app
+```
+
+这个命令表示手动信任当前安装到 `/Applications` 的 OnceDone。只建议在确认下载来源可信时使用。
+
+## 快速开始
+
+1. 启动 OnceDone 后，先在设置里检查需要启用的工具。JSON、状态栏和鼠标反转默认停用，启用后才会运行对应服务。
+2. 打开“设置 > 工具”，为截图、录屏、翻译、剪贴板、JSON 等工具配置快捷键、工具顺序和默认行为。
+3. 打开“设置 > 权限”，按需授予屏幕录制、辅助功能、输入监听、麦克风和摄像头权限。
+4. 使用主面板入口键打开主面板，按绑定键、搜索或从菜单栏直接启动工具。
+
+## 权限说明
+
+| 权限 | 用途 | 缺失时行为 |
+| --- | --- | --- |
+| 屏幕录制 | 截图、录屏、窗口和屏幕内容捕获 | 阻止相关工具启动并提示授权 |
+| 辅助功能 | 自动粘贴、鼠标滚动增强、部分选中文本读取 | 降级为复制、暂停鼠标增强或提示开启 |
+| 输入监听 | 全局单键和键盘监听 | 使用可用 fallback 或提示降级 |
+| 麦克风 | 录屏麦克风音频 | 隐藏或禁用麦克风选项 |
+| 摄像头 | 录屏摄像头画面 | 隐藏或禁用摄像头选项 |
+
+OnceDone 不绕过 macOS 权限模型，也不使用私有 API。
+
+## 隐私和本地数据
+
+- 截图、录屏、剪贴板和 JSON 内容默认只保存在本机。
+- 第三方在线翻译会把待翻译文本发送到对应服务；设置和结果卡片会标注网络请求与隐私影响。
+- Release 数据目录通常位于 `~/Library/Application Support/OnceDone`。
+- JSON 工作区、剪贴板历史、翻译历史、截图工程和录屏恢复数据都保存在本地。
+- 安全清理不会默认删除 JSON 草稿等用户工作区内容。
+
+## 常见问题
+
+### Finder 侧边栏为什么出现 `OnceDone` 盘符？
+
+这是 DMG 的临时挂载卷，用来把 `OnceDone.app` 拖到 `Applications`。安装完成后从 Finder 侧边栏推出即可；下次打开 DMG 时会再次临时出现。
+
+如果希望完全没有临时盘符体验，后续可以选择 ZIP 或 PKG 作为额外分发格式；DMG 安装方式会保留手动推出这一步。
+
+### 截图或录屏看不到屏幕内容怎么办？
+
+打开“系统设置 > 隐私与安全性 > 屏幕录制”，给 OnceDone 授权后重启 App。
+
+### 自动粘贴或鼠标反转没有生效怎么办？
+
+检查“系统设置 > 隐私与安全性 > 辅助功能”。没有辅助功能权限时，剪贴板自动粘贴会降级为只复制，鼠标反转不会安装事件 tap。
+
+### 如何重置 OnceDone 的 macOS 权限授权？
+
+如果权限状态异常、系统设置里授权项错乱，或想重新走一遍授权流程，可以关闭 OnceDone 后执行：
+
+```bash
+tccutil reset All me.oncedone.app
+```
+
+执行后重新打开 OnceDone，并在系统提示或“系统设置 > 隐私与安全性”中重新授予需要的权限。不要使用 `sudo` 执行这类命令，否则可能重置到错误的用户权限库。
+
+### 在线翻译会上传我的内容吗？
+
+Apple Translation 使用本地语言包优先。Google Web 和 Youdao Web 属于在线引擎，会把待翻译文本发送到对应服务。可以在“设置 > 工具 > 翻译”关闭网络总开关或单个在线引擎。
+
+### JSON 工具为什么默认看不到？
+
+JSON 默认停用。到“设置 > 工具”启用 JSON 后，它才会出现在主面板、菜单栏和动作快捷键中。JSON 草稿会自动保存到本地工作区，关闭窗口不会丢失。
+
+### 状态栏内存为什么和活动监视器不完全一样？
+
+OnceDone 显示的是系统整体内存使用率，并按系统 memory pressure 着色；活动监视器还会展示更多 VM、缓存、压缩内存和交换细节，因此数值口径可能不同。
+
+## License
+
+OnceDone 使用 [MIT License](LICENSE)。
